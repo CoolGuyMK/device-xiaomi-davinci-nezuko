@@ -16,12 +16,21 @@
  */
 
 #define LOG_TAG "audio_amplifier_tfa98xx"
+//#define LOG_NDEBUG 0
 
+#include <cutils/str_parms.h>
+#include <hardware/audio_amplifier.h>
+#include <hardware/hardware.h>
 #include <log/log.h>
+#include <stdint.h>
+#include <stdlib.h>
+#include <sys/types.h>
 
+/* clang-format off */
 #include "audio_hw.h"
 #include "platform.h"
 #include "platform_api.h"
+/* clang-format on */
 
 /* clang-format off */
 #define is_spkr_out_snd_dev(x) \
@@ -45,6 +54,25 @@ typedef struct amp_device {
 static tfa_t* tfa_dev = NULL;
 
 int tfa98xx_feedback(void* adev, uint32_t snd_device, bool enable) {
+static int is_speaker(uint32_t snd_device) {
+    int speaker = 0;
+    switch (snd_device) {
+        case SND_DEVICE_OUT_SPEAKER:
+        case SND_DEVICE_OUT_SPEAKER_REVERSE:
+        case SND_DEVICE_OUT_SPEAKER_AND_HEADPHONES:
+        case SND_DEVICE_OUT_VOICE_SPEAKER:
+        case SND_DEVICE_OUT_VOICE_SPEAKER_2:
+        case SND_DEVICE_OUT_SPEAKER_AND_HDMI:
+        case SND_DEVICE_OUT_SPEAKER_AND_USB_HEADSET:
+        case SND_DEVICE_OUT_SPEAKER_AND_ANC_HEADSET:
+            speaker = 1;
+            break;
+    }
+
+    return speaker;
+}
+
+int tfa98xx_start_feedback(void* adev, uint32_t snd_device) {
     tfa_dev->adev = (struct audio_device*)adev;
     int pcm_dev_tx_id = 0, rc = 0;
     struct pcm_config pcm_config_tfa98xx = {
