@@ -87,7 +87,6 @@ on boot
     chown system system /sys/devices/platform/soc/soc:qcom,dsi-display/msm_fb_ea_enable
     chmod 0660 /sys/devices/platform/soc/soc:qcom,dsi-display/msm_fb_ea_enable
 
-<<<<<<< HEAD
     chown system system /sys/devices/platform/kcal_ctrl.0/kcal_enable
     chmod 0660 /sys/devices/platform/kcal_ctrl.0/kcal_enable
     chown system system /sys/devices/platform/kcal_ctrl.0/kcal
@@ -99,9 +98,6 @@ on boot
     chown system system /sys/devices/platform/kcal_ctrl.0/kcal_cont
     chmod 0660 /sys/devices/platform/kcal_ctrl.0/kcal_cont
 
-    # Smart charging
-    chown system system /sys/class/power_supply/battery/input_suspend
-    chmod 0666 /sys/class/power_supply/battery/input_suspend
 
 on property:sys.boot_completed=1
     # Setup runtime cpusets
